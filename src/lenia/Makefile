@@ -1,34 +1,22 @@
-# Compiler
 CC = mpicc
-
-# Compiler flags
+CFLAGS = -O3 -Wall -Wextra -std=c11
 LDLIBS = -lm
-CFLAGS = -O3 -Wall
 
-SRC=src
-
-# Source files
-SRCS+=$(wildcard $(SRC)/*.c)
-
-# Header files
-HDRS = $(wildcard $(SRC)/*.h)
-
-# Object files
-OBJS = $(SRCS:$(SRC)/%.c=%.o)
-
-# Executable name
+SRC_DIR = src
 TARGET = lenia.out
+SRCS = $(wildcard $(SRC_DIR)/*.c)
+HDRS = $(wildcard $(SRC_DIR)/*.h)
+OBJS = $(SRCS:$(SRC_DIR)/%.c=%.o)
 
-# Build target
+all: $(TARGET)
+
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET) $(LDFLAGS) $(LDLIBS)
+	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDLIBS)
 
-# Compile source files to object files
-%.o: $(SRC)/%.cu $(HDRS)
-	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
+%.o: $(SRC_DIR)/%.c $(HDRS)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-%.o: $(SRC)/%.c $(HDRS)
-	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
-# Clean
 clean:
 	rm -f $(OBJS) $(TARGET)
+
+.PHONY: all clean
